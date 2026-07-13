@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tasky/features/complete_tasks_screen.dart';
-import 'package:tasky/features/home_screen.dart';
-import 'package:tasky/features/profile_screen.dart';
-import 'package:tasky/features/task_screen.dart';
+import 'package:tasky/features/tasks/complete_tasks_screen.dart';
+import 'package:tasky/features/home/home_screen.dart';
+import 'package:tasky/features/profile/profile_screen.dart';
+import 'package:tasky/features/tasks/task_screen.dart';
 
 class HomeLayout extends StatefulWidget {
   const HomeLayout({super.key});

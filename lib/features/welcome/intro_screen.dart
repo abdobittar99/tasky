@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tasky/core/reusable_widget/custom_text_formfield.dart';
 import 'package:tasky/core/services/preferences_maneger.dart';
-import 'package:tasky/features/home_layout.dart';
+import 'package:tasky/features/navigation/home_layout.dart';
 
 class Intro extends StatelessWidget {
   Intro({super.key});
