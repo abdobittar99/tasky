@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:tasky/core/constants/storage_key.dart';
 import 'package:tasky/core/services/preferences_maneger.dart';
 import 'package:tasky/features/add_task/add_task.dart';
 import 'package:tasky/models/task_model.dart';
@@ -18,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String? username;
   String? userImageProf;
+  String? motivattionQuote;
 
   List<TaskModel> tasks = [];
   bool isloading = false;
@@ -34,8 +36,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _loadUser() async {
     setState(() {
-      username = PreferencesManeger().getString('userName');
-      userImageProf = PreferencesManeger().getString('User_image');
+      username = PreferencesManeger().getString(StorageKey.username);
+      userImageProf = PreferencesManeger().getString(StorageKey.userImage);
+      motivattionQuote =
+          PreferencesManeger().getString(StorageKey.motivattionQuote) ??
+          "One task at a time.One step closer.";
     });
   }
 
@@ -43,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       isloading = true;
     });
-    final finalTask = PreferencesManeger().getString('tasks');
+    final finalTask = PreferencesManeger().getString(StorageKey.tasks);
     if (finalTask != null) {
       final taskDecode = jsonDecode(finalTask) as List<dynamic>;
 
@@ -72,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _calculatePercent();
     });
     final updatedtasks = tasks.map((e) => e.toMap()).toList();
-    PreferencesManeger().setString("tasks", jsonEncode(updatedtasks));
+    PreferencesManeger().setString(StorageKey.tasks, jsonEncode(updatedtasks));
   }
 
   _deleteTask(int? id) async {
@@ -82,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _calculatePercent();
     });
     final updatedtasks = tasks.map((e) => e.toMap()).toList();
-    PreferencesManeger().setString("tasks", jsonEncode(updatedtasks));
+    PreferencesManeger().setString(StorageKey.tasks, jsonEncode(updatedtasks));
   }
 
   @override
@@ -119,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                             Text(
-                              'One task at a time.One step closer. ',
+                              "$motivattionQuote",
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
                           ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tasky/core/constants/storage_key.dart';
 import 'package:tasky/core/reusable_widget/custom_text_formfield.dart';
 import 'package:tasky/core/services/preferences_maneger.dart';
 import 'package:tasky/features/navigation/home_layout.dart';
@@ -79,7 +80,7 @@ class Intro extends StatelessWidget {
                   onPressed: () async {
                     if (_key.currentState?.validate() ?? false) {
                       await PreferencesManeger().setString(
-                        'userName',
+                        StorageKey.username,
                         controller.value.text,
                       );
 
