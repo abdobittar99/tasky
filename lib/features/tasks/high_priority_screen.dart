@@ -8,37 +8,35 @@ class HighPriorityScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<TasksController>(
-      create: (_) => TasksController()..init(),
-      builder: (context, _) {
-        final controller = context.read<TasksController>();
+    final controller = context.read<TasksController>();
 
-        return Scaffold(
-          appBar: AppBar(title: Text("high priority tasks")),
-          body: Padding(
-            padding: const EdgeInsets.all(14.0),
-            child: controller.isloading
-                ? CircularProgressIndicator()
-                : Consumer<TasksController>(
-                    builder: (context, value, child) {
-                      return TaskListWidget(
-                        emptyState: 'No tasks To do',
-                        tasks: value.highPriorityTasks,
-                        onTap: (value, index) async {
-                          controller.doneHighPriorityTasks(value, index);
-                        },
-                        onDelete: (int? id) {
-                          controller.deleteTask(id);
-                        },
-                        onEdit: () {
-                          controller.init();
-                        },
+    return Scaffold(
+      appBar: AppBar(title: Text("high priority tasks")),
+      body: Padding(
+        padding: const EdgeInsets.all(14.0),
+        child: controller.isloading
+            ? CircularProgressIndicator()
+            : Consumer<TasksController>(
+                builder: (context, valueController, child) {
+                  return TaskListWidget(
+                    emptyState: 'No tasks To do',
+                    tasks: valueController.highPriorityTasks,
+                    onTap: (value, index) async {
+                      controller.doneTasks(
+                        value,
+                        valueController.highPriorityTasks[index!].id,
                       );
                     },
-                  ),
-          ),
-        );
-      },
+                    onDelete: (int? id) {
+                      controller.deleteTask(id);
+                    },
+                    onEdit: () {
+                      controller.init();
+                    },
+                  );
+                },
+              ),
+      ),
     );
   }
 }

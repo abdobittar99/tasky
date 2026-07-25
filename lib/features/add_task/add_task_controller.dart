@@ -34,7 +34,7 @@ class AddTaskController extends ChangeNotifier {
       final taskEncode = jsonEncode(listTasks);
 
       await PreferencesManeger().setString(StorageKey.tasks, taskEncode);
-
+      if (!context.mounted) return;
       Navigator.of(context).pop(true);
     }
     notifyListeners();

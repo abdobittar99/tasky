@@ -83,7 +83,7 @@ class Intro extends StatelessWidget {
                         StorageKey.username,
                         controller.value.text,
                       );
-
+                      if (!context.mounted) return;
                       Navigator.push(
                         context,
                         MaterialPageRoute(

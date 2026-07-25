@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tasky/features/home/home_controller.dart';
 import 'package:tasky/core/components/task_item_widget.dart';
+import 'package:tasky/features/tasks/tasks_controller.dart';
 
 class SliverTaskListWidget extends StatelessWidget {
   const SliverTaskListWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HomeController>(
+    return Consumer<TasksController>(
       builder: (context, controller, child) {
         final tasks = controller.tasks;
         return controller.isloading
@@ -38,7 +38,7 @@ class SliverTaskListWidget extends StatelessWidget {
                     return TaskItemWidget(
                       model: tasks[index],
                       onChanged: (bool? value) {
-                        controller.donTask(value, index);
+                        controller.doneTasks(value, tasks[index].id);
                       },
                       onDelete: (int? id) {
                         controller.deleteTask(id);

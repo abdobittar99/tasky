@@ -3,14 +3,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tasky/core/theme/theme_controller.dart';
-import 'package:tasky/features/home/home_controller.dart';
+import 'package:tasky/features/tasks/tasks_controller.dart';
 
 class ArchivedTaskWidget extends StatelessWidget {
   const ArchivedTaskWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HomeController>(
+    return Consumer<TasksController>(
       builder: (context, controller, child) {
         return Container(
           width: double.infinity,

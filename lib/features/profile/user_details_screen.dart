@@ -82,6 +82,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                       StorageKey.motivattionQuote,
                       motivationController.value.text,
                     );
+                    if (!context.mounted) return;
                     Navigator.of(context).pop(true);
                   }
                 },

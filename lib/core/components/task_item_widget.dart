@@ -236,7 +236,7 @@ class TaskItemWidget extends StatelessWidget {
                             "tasks",
                             taskEncode,
                           );
-
+                          if (!context.mounted) return;
                           Navigator.of(context).pop(true);
                         }
                       },
