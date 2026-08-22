@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:tasky/core/constants/app_size.dart';
 import 'package:tasky/features/add_task/add_task.dart';
 import 'package:tasky/features/home/home_controller.dart';
 import 'package:tasky/features/home/components/archived_task_widget.dart';
@@ -17,7 +18,7 @@ class HomeScreen extends StatelessWidget {
       create: (context) => HomeController()..init(),
       child: Scaffold(
         body: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(AppSize.w16),
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
@@ -27,13 +28,13 @@ class HomeScreen extends StatelessWidget {
                     Row(
                       children: [
                         SizedBox(
-                          width: 40,
-                          height: 40.0,
+                          width: AppSize.w40,
+                          height: AppSize.h40,
                           child: Selector<HomeController, String?>(
                             selector: (p0, p1) => p1.userImageProf,
                             builder: (context, userImageProf, child) {
                               return CircleAvatar(
-                                radius: 100,
+                                radius: AppSize.r100,
 
                                 backgroundImage: userImageProf == null
                                     ? AssetImage('assets/images/abdo.png')
@@ -42,7 +43,7 @@ class HomeScreen extends StatelessWidget {
                             },
                           ),
                         ),
-                        SizedBox(width: 8),
+                        SizedBox(width: AppSize.w8),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,7 +75,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: AppSize.h16),
                     Text(
                       'Yuhuu ,Your work Is ',
                       style: Theme.of(context).textTheme.displayLarge,
@@ -89,18 +90,20 @@ class HomeScreen extends StatelessWidget {
                         SvgPicture.asset('assets/images/waving-hand.svg'),
                       ],
                     ),
-                    SizedBox(height: 16.0),
+                    SizedBox(height: AppSize.h16),
                     ArchivedTaskWidget(),
-                    SizedBox(height: 8.0),
+                    SizedBox(height: AppSize.h8),
                     HighPriorityTasksWidget(),
 
                     Padding(
-                      padding: const EdgeInsets.only(top: 16, bottom: 16.0),
+                      padding: EdgeInsets.only(
+                        top: AppSize.h24,
+                        bottom: AppSize.h16,
+                      ),
                       child: Text(
                         'My Tasks',
-                        style: Theme.of(
-                          context,
-                        ).textTheme.titleMedium!.copyWith(fontSize: 20.0),
+                        style: Theme.of(context).textTheme.titleMedium!
+                            .copyWith(fontSize: AppSize.sp20),
                       ),
                     ),
                   ],
@@ -111,7 +114,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         floatingActionButton: SizedBox(
-          height: 40,
+          height: AppSize.h40,
           child: Builder(
             builder: (context) {
               return FloatingActionButton.extended(
@@ -133,7 +136,7 @@ class HomeScreen extends StatelessWidget {
                 icon: Icon(Icons.add),
 
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadiusGeometry.circular(30),
+                  borderRadius: BorderRadiusGeometry.circular(AppSize.r30),
                 ),
               );
             },

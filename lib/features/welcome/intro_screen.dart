@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tasky/core/constants/app_size.dart';
 import 'package:tasky/core/constants/storage_key.dart';
 import 'package:tasky/core/reusable_widget/custom_text_formfield.dart';
 import 'package:tasky/core/services/preferences_maneger.dart';
@@ -19,12 +20,16 @@ class Intro extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 20.0),
+                SizedBox(height: AppSize.h16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image(image: AssetImage("assets/images/Vector.png")),
-                    SizedBox(width: 16.0),
+                    Image(
+                      image: AssetImage("assets/images/Vector.png"),
+                      width: AppSize.w42,
+                      height: AppSize.h42,
+                    ),
+                    SizedBox(width: AppSize.w16),
 
                     Text(
                       'Tasky',
@@ -32,7 +37,7 @@ class Intro extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 90.0),
+                SizedBox(height: AppSize.h16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -40,29 +45,26 @@ class Intro extends StatelessWidget {
                       'Welcome To Tasky',
                       style: Theme.of(context).textTheme.displaySmall,
                     ),
-                    SizedBox(width: 8.0),
+                    SizedBox(width: AppSize.w8),
                     SvgPicture.asset('assets/images/waving-hand.svg'),
                   ],
                 ),
-                SizedBox(height: 8.0),
+                SizedBox(height: AppSize.h8),
                 Text(
                   'Your productivity journey starts here.',
                   style: Theme.of(
                     context,
-                  ).textTheme.displaySmall!.copyWith(fontSize: 16),
+                  ).textTheme.displaySmall!.copyWith(fontSize: AppSize.sp16),
                 ),
-                SizedBox(height: 24.0),
+                SizedBox(height: AppSize.h24),
                 SvgPicture.asset(
                   'assets/images/pana.svg',
-                  width: 216.0,
-                  height: 200.0,
+                  width: AppSize.w216,
+                  height: AppSize.h204,
                 ),
-                SizedBox(height: 24.0),
+                SizedBox(height: AppSize.h28),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 16.0,
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: AppSize.h16),
                   child: CustomTextFormfield(
                     controller: controller,
                     titel: 'full name',
@@ -75,7 +77,7 @@ class Intro extends StatelessWidget {
                     },
                   ),
                 ),
-                SizedBox(height: 20.0),
+                SizedBox(height: AppSize.h24),
                 ElevatedButton(
                   onPressed: () async {
                     if (_key.currentState?.validate() ?? false) {
@@ -94,9 +96,6 @@ class Intro extends StatelessWidget {
                       );
                     }
                   },
-                  style: ElevatedButton.styleFrom(
-                    fixedSize: Size(MediaQuery.of(context).size.width, 40),
-                  ),
                   child: Text('Let’s Get Started'),
                 ),
               ],

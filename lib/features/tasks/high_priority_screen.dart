@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tasky/core/constants/app_size.dart';
 import 'package:tasky/features/tasks/tasks_controller.dart';
 import 'package:tasky/core/components/task_list_widget.dart';
 
@@ -13,7 +14,7 @@ class HighPriorityScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text("high priority tasks")),
       body: Padding(
-        padding: const EdgeInsets.all(14.0),
+        padding: EdgeInsets.all(AppSize.w14),
         child: controller.isloading
             ? CircularProgressIndicator()
             : Consumer<TasksController>(

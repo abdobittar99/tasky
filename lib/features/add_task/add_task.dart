@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tasky/core/constants/app_size.dart';
 import 'package:tasky/core/reusable_widget/custom_text_formfield.dart';
 import 'package:tasky/features/add_task/add_task_controller.dart';
 
@@ -15,7 +16,10 @@ class AddTask extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(title: Text('New Task')),
           body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSize.w16,
+              vertical: AppSize.h8,
+            ),
             child: Form(
               key: controller.key,
               child: Column(
@@ -37,7 +41,7 @@ class AddTask extends StatelessWidget {
                             },
                           ),
 
-                          SizedBox(height: 20.0),
+                          SizedBox(height: AppSize.h20),
                           CustomTextFormfield(
                             controller: controller.descriptionTaskcontroller,
                             titel: 'description',
@@ -45,7 +49,7 @@ class AddTask extends StatelessWidget {
                                 'Finish onboarding UI and hand off to devs by Thursday',
                             maxLines: 5,
                           ),
-                          SizedBox(height: 20.0),
+                          SizedBox(height: AppSize.h20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -70,10 +74,6 @@ class AddTask extends StatelessWidget {
                     ),
                   ),
                   ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      fixedSize: Size(MediaQuery.of(context).size.width, 40),
-                    ),
-
                     onPressed: () async {
                       context.read<AddTaskController>().addTask(context);
                     },

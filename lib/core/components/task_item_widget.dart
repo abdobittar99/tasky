@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:tasky/core/constants/app_size.dart';
 import 'package:tasky/core/enums/task_item_actions_enum.dart';
 import 'package:tasky/core/reusable_widget/custom_checkbox.dart';
 import 'package:tasky/core/reusable_widget/custom_text_formfield.dart';
@@ -25,10 +26,10 @@ class TaskItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 50,
+      height: AppSize.h50,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppSize.r16),
         color: Theme.of(context).colorScheme.primaryContainer,
         border: Border.all(
           color: ThemeController.isDark()
@@ -39,7 +40,7 @@ class TaskItemWidget extends StatelessWidget {
       child: Row(
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 8, left: 8.0),
+            padding: EdgeInsets.symmetric(horizontal: AppSize.w8),
             child: CustomCheckbox(value: model.isDone, onChanged: onChanged),
           ),
           Expanded(
@@ -102,14 +103,14 @@ class TaskItemWidget extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Delete Task", style: TextStyle(fontSize: 20)),
+          title: Text("Delete Task", style: TextStyle(fontSize: AppSize.sp20)),
           content: Text("Are u sure u want to delete this task"),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text("Cancel", style: TextStyle(fontSize: 20)),
+              child: Text("Cancel", style: TextStyle(fontSize: AppSize.sp20)),
             ),
             TextButton(
               onPressed: () {
@@ -118,7 +119,7 @@ class TaskItemWidget extends StatelessWidget {
                 Navigator.pop(context);
               },
               style: TextButton.styleFrom(foregroundColor: Colors.red),
-              child: Text("Delete", style: TextStyle(fontSize: 20)),
+              child: Text("Delete", style: TextStyle(fontSize: AppSize.sp20)),
             ),
           ],
         );
@@ -146,9 +147,9 @@ class TaskItemWidget extends StatelessWidget {
           builder: (BuildContext context, setState) {
             return Padding(
               padding: EdgeInsets.only(
-                left: 16,
-                right: 16,
-                top: 8,
+                left: AppSize.w16,
+                right: AppSize.w16,
+                top: AppSize.h8,
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
               child: Form(
@@ -160,7 +161,7 @@ class TaskItemWidget extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 15.0),
+                          SizedBox(height: AppSize.h16),
                           CustomTextFormfield(
                             controller: taskNamecontroller,
                             titel: 'task name',
@@ -173,7 +174,7 @@ class TaskItemWidget extends StatelessWidget {
                             },
                           ),
 
-                          SizedBox(height: 10.0),
+                          SizedBox(height: AppSize.h10),
                           CustomTextFormfield(
                             controller: descriptionTaskcontroller,
                             titel: 'description',
@@ -181,7 +182,7 @@ class TaskItemWidget extends StatelessWidget {
                                 'Finish onboarding UI and hand off to devs by Thursday',
                             maxLines: 5,
                           ),
-                          SizedBox(height: 10.0),
+                          SizedBox(height: AppSize.h10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -203,10 +204,6 @@ class TaskItemWidget extends StatelessWidget {
                       ),
                     ),
                     ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: Size(MediaQuery.of(context).size.width, 40),
-                      ),
-
                       onPressed: () async {
                         if (key.currentState?.validate() ?? false) {
                           final taskjson = PreferencesManeger().getString(

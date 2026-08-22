@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:tasky/core/constants/app_size.dart';
 import 'package:tasky/core/constants/storage_key.dart';
 import 'package:tasky/core/services/preferences_maneger.dart';
 import 'package:tasky/core/theme/theme_controller.dart';
@@ -45,18 +46,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return isloading
         ? Center(child: CircularProgressIndicator())
         : Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(AppSize.w16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 4.0),
+                  padding: EdgeInsets.only(top: AppSize.h4),
                   child: Text(
                     'My Profile',
                     style: Theme.of(context).textTheme.labelSmall,
                   ),
                 ),
-                SizedBox(height: 14.0),
+                SizedBox(height: AppSize.h14),
                 Center(
                   child: Column(
                     children: [
@@ -68,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             backgroundImage: userImageProf == null
                                 ? AssetImage("assets/images/abdo.png")
                                 : FileImage(File(userImageProf!)),
-                            radius: 60.0,
+                            radius: AppSize.r60,
                           ),
                           GestureDetector(
                             onTap: () async {
@@ -85,23 +86,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               }
                             },
                             child: Container(
-                              width: 34,
-                              height: 34.0,
+                              width: AppSize.w34,
+                              height: AppSize.h34,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
+                                borderRadius: BorderRadius.circular(
+                                  AppSize.r100,
+                                ),
                                 color: Theme.of(
                                   context,
                                 ).colorScheme.primaryContainer,
                               ),
                               child: Icon(
                                 Icons.camera_enhance_outlined,
-                                size: 24.0,
+                                size: AppSize.r18,
                               ),
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 8.0),
+                      SizedBox(height: AppSize.h8),
                       Text(
                         username,
                         style: Theme.of(context).textTheme.labelSmall,
@@ -113,12 +116,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: 24.0),
+                SizedBox(height: AppSize.h24),
                 Text(
                   "Profile Info",
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
-                SizedBox(height: 8.0),
+                SizedBox(height: AppSize.h8),
                 ListTile(
                   onTap: () async {
                     final bool? result = await Navigator.push(
@@ -138,18 +141,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                   contentPadding: EdgeInsets.zero,
                   title: Text("User details"),
-                  leading: Icon(Icons.person, size: 24),
+                  leading: Icon(Icons.person, size: AppSize.r18),
                   trailing: Icon(
                     Icons.arrow_forward,
                     color: Theme.of(context).colorScheme.secondary,
-                    size: 24,
+                    size: AppSize.r18,
                   ),
                 ),
                 Divider(thickness: 1),
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text("Dark Mode"),
-                  leading: Icon(Icons.dark_mode_outlined, size: 24),
+                  leading: Icon(Icons.dark_mode_outlined, size: AppSize.r18),
                   trailing: ValueListenableBuilder(
                     valueListenable: ThemeController.themeNotifier,
                     builder: (context, value, child) {
@@ -182,11 +185,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                   contentPadding: EdgeInsets.zero,
                   title: Text("Log Out"),
-                  leading: Icon(Icons.logout, size: 24),
+                  leading: Icon(Icons.logout, size: AppSize.r18),
                   trailing: Icon(
                     Icons.arrow_forward,
                     color: Theme.of(context).colorScheme.secondary,
-                    size: 24,
+                    size: AppSize.r18,
                   ),
                 ),
               ],
