@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:tasky/core/constants/storage_key.dart';
-import 'package:tasky/core/services/preferences_maneger.dart';
+import 'package:tasky/core/services/file_storage_manager.dart';
 import 'package:tasky/models/task_model.dart';
 
 class TasksController extends ChangeNotifier {
@@ -21,18 +18,18 @@ class TasksController extends ChangeNotifier {
 
   void loadjson() async {
     isloading = true;
-    final finalTask = PreferencesManeger().getString(StorageKey.tasks);
-    if (finalTask != null) {
-      final taskDecode = jsonDecode(finalTask) as List<dynamic>;
+    // final finalTask = PreferencesManeger().getString(StorageKey.tasks);
+    // if (finalTask != null) {
+    //   final taskDecode = jsonDecode(finalTask) as List<dynamic>;
+    final tasksData = await FileStorageManager().loadTasks();
+    tasks = tasksData
+        .where((e) => e != null)
+        .map((e) => TaskModel.fromJson(e as Map<String, dynamic>))
+        .toList();
+    _loadData();
 
-      tasks = taskDecode
-          .where((e) => e != null)
-          .map((e) => TaskModel.fromJson(e as Map<String, dynamic>))
-          .toList();
-      _loadData();
+    _calculatePercent();
 
-      _calculatePercent();
-    }
     isloading = false;
     notifyListeners();
   }
@@ -52,7 +49,7 @@ class TasksController extends ChangeNotifier {
     _calculatePercent();
 
     final updatedtasks = tasks.map((e) => e.toMap()).toList();
-    PreferencesManeger().setString(StorageKey.tasks, jsonEncode(updatedtasks));
+    await FileStorageManager().saveTasks(updatedtasks);
     notifyListeners();
   }
 
@@ -63,7 +60,7 @@ class TasksController extends ChangeNotifier {
     _loadData();
     _calculatePercent();
     final updatedtasks = tasks.map((e) => e.toMap()).toList();
-    PreferencesManeger().setString(StorageKey.tasks, jsonEncode(updatedtasks));
+    await FileStorageManager().saveTasks(updatedtasks);
 
     notifyListeners();
   }
@@ -73,5 +70,9 @@ class TasksController extends ChangeNotifier {
     totalDoneTasks = tasks.where((e) => e.isDone).length;
     percent = totalTasks == 0 ? 0 : totalDoneTasks / totalTasks;
     notifyListeners();
+  }
+
+  reload() {
+    loadjson();
   }
 }

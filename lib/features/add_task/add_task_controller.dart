@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:tasky/core/constants/storage_key.dart';
-import 'package:tasky/core/services/preferences_maneger.dart';
+import 'package:tasky/core/services/file_storage_manager.dart';
 import 'package:tasky/models/task_model.dart';
 
 class AddTaskController extends ChangeNotifier {
@@ -17,11 +14,8 @@ class AddTaskController extends ChangeNotifier {
 
   void addTask(BuildContext context) async {
     if (key.currentState?.validate() ?? false) {
-      final taskjson = PreferencesManeger().getString(StorageKey.tasks);
-      List<dynamic> listTasks = [];
-      if (taskjson != null) {
-        listTasks = jsonDecode(taskjson);
-      }
+      List<dynamic> listTasks = await FileStorageManager().loadTasks();
+
       TaskModel model = TaskModel(
         id: listTasks.length + 1,
         taskName: taskNamecontroller.text,
@@ -30,14 +24,11 @@ class AddTaskController extends ChangeNotifier {
       );
 
       listTasks.add(model.toMap());
+      await FileStorageManager().saveTasks(listTasks);
 
-      final taskEncode = jsonEncode(listTasks);
-
-      await PreferencesManeger().setString(StorageKey.tasks, taskEncode);
       if (!context.mounted) return;
       Navigator.of(context).pop(true);
     }
-    notifyListeners();
   }
 
   void toggle(bool value) {

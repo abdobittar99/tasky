@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:tasky/core/constants/app_size.dart';
 import 'package:tasky/core/enums/task_item_actions_enum.dart';
 import 'package:tasky/core/reusable_widget/custom_checkbox.dart';
 import 'package:tasky/core/reusable_widget/custom_text_formfield.dart';
-import 'package:tasky/core/services/preferences_maneger.dart';
+import 'package:tasky/core/services/file_storage_manager.dart';
 import 'package:tasky/core/theme/theme_controller.dart';
 import 'package:tasky/models/task_model.dart';
 
@@ -206,13 +204,9 @@ class TaskItemWidget extends StatelessWidget {
                     ElevatedButton.icon(
                       onPressed: () async {
                         if (key.currentState?.validate() ?? false) {
-                          final taskjson = PreferencesManeger().getString(
-                            "tasks",
-                          );
-                          List<dynamic> listTasks = [];
-                          if (taskjson != null) {
-                            listTasks = jsonDecode(taskjson);
-                          }
+                          List<dynamic> listTasks = await FileStorageManager()
+                              .loadTasks();
+
                           TaskModel newModel = TaskModel(
                             id: model.id,
                             taskName: taskNamecontroller.text,
@@ -227,12 +221,8 @@ class TaskItemWidget extends StatelessWidget {
                           final int index = listTasks.indexOf(item);
                           listTasks[index] = newModel.toMap();
 
-                          final taskEncode = jsonEncode(listTasks);
+                          await FileStorageManager().saveTasks(listTasks);
 
-                          await PreferencesManeger().setString(
-                            "tasks",
-                            taskEncode,
-                          );
                           if (!context.mounted) return;
                           Navigator.of(context).pop(true);
                         }

@@ -3,10 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:tasky/core/constants/app_size.dart';
 import 'package:tasky/core/constants/storage_key.dart';
+import 'package:tasky/core/services/file_storage_manager.dart';
 import 'package:tasky/core/services/preferences_maneger.dart';
 import 'package:tasky/core/theme/theme_controller.dart';
+import 'package:tasky/features/tasks/tasks_controller.dart';
 import 'package:tasky/features/welcome/intro_screen.dart';
 import 'package:tasky/features/profile/user_details_screen.dart';
 
@@ -170,8 +173,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onTap: () async {
                     PreferencesManeger().remove(StorageKey.username);
                     PreferencesManeger().remove(StorageKey.motivattionQuote);
-                    PreferencesManeger().remove(StorageKey.tasks);
                     PreferencesManeger().remove(StorageKey.userImage);
+                    await FileStorageManager().clear();
+                    context.read<TasksController>().reload();
 
                     Navigator.pushAndRemoveUntil(
                       context,
