@@ -63,7 +63,7 @@ class HomeScreen extends StatelessWidget {
                                 selector: (p0, p1) => p1.motivattionQuote,
                                 builder: (context, value, child) {
                                   return Text(
-                                    "$value.motivattionQuote",
+                                    "$value",
                                     style: Theme.of(
                                       context,
                                     ).textTheme.titleSmall,
