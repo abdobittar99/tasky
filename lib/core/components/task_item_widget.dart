@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:tasky/core/constants/app_size.dart';
 import 'package:tasky/core/enums/task_item_actions_enum.dart';
@@ -24,7 +26,7 @@ class TaskItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: AppSize.h50,
+      height: AppSize.h60,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppSize.r16),
@@ -148,7 +150,12 @@ class TaskItemWidget extends StatelessWidget {
                 left: AppSize.w16,
                 right: AppSize.w16,
                 top: AppSize.h8,
-                bottom: MediaQuery.of(context).viewInsets.bottom,
+                bottom:
+                    math.max(
+                      MediaQuery.of(context).viewInsets.bottom,
+                      MediaQuery.of(context).viewPadding.bottom,
+                    ) +
+                    AppSize.h16,
               ),
               child: Form(
                 key: key,
