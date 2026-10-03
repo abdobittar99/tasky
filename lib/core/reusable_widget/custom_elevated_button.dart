@@ -11,7 +11,6 @@ class CustomElevatedButtom extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: Color(0xff15B86C),
         foregroundColor: Color(0xfffffcfc),
-        fixedSize: Size(MediaQuery.of(context).size.width, 40),
       ),
       child: Text(text ?? ''),
     );

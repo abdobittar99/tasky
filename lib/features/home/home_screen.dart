@@ -1,224 +1,145 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:tasky/core/services/preferences_maneger.dart';
+import 'package:provider/provider.dart';
+import 'package:tasky/core/constants/app_size.dart';
 import 'package:tasky/features/add_task/add_task.dart';
-import 'package:tasky/models/task_model.dart';
+import 'package:tasky/features/home/home_controller.dart';
 import 'package:tasky/features/home/components/archived_task_widget.dart';
 import 'package:tasky/features/home/components/high_priority_tasks_widget.dart';
 import 'package:tasky/features/home/components/sliver_task_list_widget.dart';
+import 'package:tasky/features/tasks/tasks_controller.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  String? username;
-  String? userImageProf;
-
-  List<TaskModel> tasks = [];
-  bool isloading = false;
-  int totalTasks = 0;
-  int totalDoneTasks = 0;
-  double percent = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadUser();
-    _loadjson();
-  }
-
-  void _loadUser() async {
-    setState(() {
-      username = PreferencesManeger().getString('userName');
-      userImageProf = PreferencesManeger().getString('User_image');
-    });
-  }
-
-  void _loadjson() async {
-    setState(() {
-      isloading = true;
-    });
-    final finalTask = PreferencesManeger().getString('tasks');
-    if (finalTask != null) {
-      final taskDecode = jsonDecode(finalTask) as List<dynamic>;
-
-      setState(() {
-        tasks = taskDecode
-            .where((e) => e != null)
-            .map((e) => TaskModel.fromJson(e as Map<String, dynamic>))
-            .toList();
-        _calculatePercent();
-      });
-    }
-    setState(() {
-      isloading = false;
-    });
-  }
-
-  _calculatePercent() {
-    totalTasks = tasks.length;
-    totalDoneTasks = tasks.where((e) => e.isDone).length;
-    percent = totalTasks == 0 ? 0 : totalDoneTasks / totalTasks;
-  }
-
-  _donTask(bool? value, int? index) async {
-    setState(() {
-      tasks[index!].isDone = value ?? false;
-      _calculatePercent();
-    });
-    final updatedtasks = tasks.map((e) => e.toMap()).toList();
-    PreferencesManeger().setString("tasks", jsonEncode(updatedtasks));
-  }
-
-  _deleteTask(int? id) async {
-    if (id == null) return;
-    setState(() {
-      tasks.removeWhere((task) => task.id == id);
-      _calculatePercent();
-    });
-    final updatedtasks = tasks.map((e) => e.toMap()).toList();
-    PreferencesManeger().setString("tasks", jsonEncode(updatedtasks));
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 40,
-                        height: 40.0,
-                        child: CircleAvatar(
-                          radius: 100,
+    return ChangeNotifierProvider<HomeController>(
+      create: (context) => HomeController()..init(),
+      child: Scaffold(
+        body: Padding(
+          padding: EdgeInsets.all(AppSize.w16),
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: AppSize.w40,
+                          height: AppSize.h40,
+                          child: Selector<HomeController, String?>(
+                            selector: (p0, p1) => p1.userImageProf,
+                            builder: (context, userImageProf, child) {
+                              return CircleAvatar(
+                                radius: AppSize.r100,
 
-                          backgroundImage: userImageProf == null
-                              ? AssetImage('assets/images/abdo.png')
-                              : FileImage(File(userImageProf!)),
+                                backgroundImage: userImageProf == null
+                                    ? AssetImage('assets/images/abdo.png')
+                                    : FileImage(File(userImageProf)),
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 8),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'welcom $username ',
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                            Text(
-                              'One task at a time.One step closer. ',
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                          ],
+                        SizedBox(width: AppSize.w8),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Selector<HomeController, String?>(
+                                selector: (p0, p1) => p1.username,
+                                builder: (context, username, child) {
+                                  return Text(
+                                    'welcom $username ',
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleMedium,
+                                  );
+                                },
+                              ),
+                              Selector<HomeController, String?>(
+                                selector: (p0, p1) => p1.motivattionQuote,
+                                builder: (context, value, child) {
+                                  return Text(
+                                    "$value",
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.titleSmall,
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    'Yuhuu ,Your work Is ',
-                    style: Theme.of(context).textTheme.displayLarge,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        'almost done !  ',
-                        style: Theme.of(context).textTheme.displayLarge,
-                      ),
-
-                      SvgPicture.asset('assets/images/waving-hand.svg'),
-                    ],
-                  ),
-                  SizedBox(height: 16.0),
-                  ArchivedTaskWidget(
-                    doneTasks: totalDoneTasks,
-                    totalTasks: totalTasks,
-                    percent: percent,
-                  ),
-                  SizedBox(height: 8.0),
-                  HighPriorityTasksWidget(
-                    tasks: tasks,
-                    onTap: (value, index) {
-                      _donTask(value, index);
-                    },
-                    reload: () {
-                      _loadjson();
-                    },
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16, bottom: 16.0),
-                    child: Text(
-                      'My Tasks',
-                      style: Theme.of(
-                        context,
-                      ).textTheme.titleMedium!.copyWith(fontSize: 20.0),
+                      ],
                     ),
-                  ),
-                ],
+                    SizedBox(height: AppSize.h16),
+                    Text(
+                      'Yuhuu ,Your work Is ',
+                      style: Theme.of(context).textTheme.displayLarge,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          'almost done !  ',
+                          style: Theme.of(context).textTheme.displayLarge,
+                        ),
+
+                        SvgPicture.asset('assets/images/waving-hand.svg'),
+                      ],
+                    ),
+                    SizedBox(height: AppSize.h16),
+                    ArchivedTaskWidget(),
+                    SizedBox(height: AppSize.h8),
+                    HighPriorityTasksWidget(),
+
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: AppSize.h24,
+                        bottom: AppSize.h16,
+                      ),
+                      child: Text(
+                        'My Tasks',
+                        style: Theme.of(context).textTheme.titleMedium!
+                            .copyWith(fontSize: AppSize.sp20),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            isloading
-                ? SliverToBoxAdapter(
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                        backgroundColor: Theme.of(
-                          context,
-                        ).colorScheme.secondary,
-                      ),
-                    ),
-                  )
-                : SliverTaskListWidget(
-                    emptyState: 'No Data',
-                    tasks: tasks,
-                    onTap: (value, index) async {
-                      _donTask(value, index);
-                    },
-                    onDelete: (int? id) {
-                      _deleteTask(id);
-                    },
-                    onEdit: () {
-                      _loadjson();
-                    },
-                  ),
-          ],
+              SliverTaskListWidget(),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: SizedBox(
-        height: 40,
-        child: FloatingActionButton.extended(
-          onPressed: () async {
-            final bool? result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) {
-                  return AddTask();
+        floatingActionButton: SizedBox(
+          height: AppSize.h40,
+          child: Builder(
+            builder: (context) {
+              return FloatingActionButton.extended(
+                onPressed: () async {
+                  final bool? result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return AddTask();
+                      },
+                    ),
+                  );
+                  if (result != null && result) {
+                    if (!context.mounted) return;
+                    context.read<TasksController>().loadjson();
+                  }
                 },
-              ),
-            );
-            if (result != null && result) {
-              _loadjson();
-            }
-          },
-          label: Text('Add New Task'),
-          icon: Icon(Icons.add),
+                label: Text('Add New Task'),
+                icon: Icon(Icons.add),
 
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadiusGeometry.circular(30),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadiusGeometry.circular(AppSize.r30),
+                ),
+              );
+            },
           ),
         ),
       ),

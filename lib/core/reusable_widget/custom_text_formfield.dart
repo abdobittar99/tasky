@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tasky/core/constants/app_size.dart';
 
 class CustomTextFormfield extends StatelessWidget {
   const CustomTextFormfield({
@@ -21,7 +22,7 @@ class CustomTextFormfield extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(titel, style: Theme.of(context).textTheme.titleMedium),
-        SizedBox(height: 8.0),
+        SizedBox(height: AppSize.h8),
         TextFormField(
           controller: controller,
           decoration: InputDecoration(hintText: hintText),

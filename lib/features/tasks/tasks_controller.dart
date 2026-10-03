@@ -1,0 +1,70 @@
+import 'package:flutter/material.dart';
+import 'package:tasky/core/services/hive_storage_manager.dart';
+import 'package:tasky/models/task_model.dart';
+
+class TasksController extends ChangeNotifier {
+  bool isloading = false;
+  List<TaskModel> tasks = [];
+  List<TaskModel> todoTasks = [];
+  List<TaskModel> completeTasks = [];
+  List<TaskModel> highPriorityTasks = [];
+  int totalTasks = 0;
+  int totalDoneTasks = 0;
+  double percent = 0;
+
+  void init() {
+    loadjson();
+  }
+
+  void loadjson() async {
+    isloading = true;
+    tasks = HiveStorageManager().loadTasks();
+
+    _loadData();
+
+    _calculatePercent();
+
+    isloading = false;
+    notifyListeners();
+  }
+
+  void _loadData() {
+    todoTasks = tasks.where((e) => !e.isDone).toList();
+    completeTasks = tasks.where((e) => e.isDone).toList();
+    highPriorityTasks = tasks.where((e) => e.ishighPriority).toList();
+
+    highPriorityTasks = highPriorityTasks.reversed.toList();
+  }
+
+  void doneTasks(bool? value, int id) async {
+    final index = tasks.indexWhere((e) => e.id == id);
+    tasks[index].isDone = value ?? false;
+    _loadData();
+    _calculatePercent();
+
+    await HiveStorageManager().saveTasks(tasks);
+    notifyListeners();
+  }
+
+  deleteTask(int? id) async {
+    if (id == null) return;
+
+    tasks.removeWhere((e) => e.id == id);
+    _loadData();
+    _calculatePercent();
+    await HiveStorageManager().saveTasks(tasks);
+
+    notifyListeners();
+  }
+
+  _calculatePercent() {
+    totalTasks = tasks.length;
+    totalDoneTasks = tasks.where((e) => e.isDone).length;
+    percent = totalTasks == 0 ? 0 : totalDoneTasks / totalTasks;
+    notifyListeners();
+  }
+
+  reload() {
+    loadjson();
+  }
+}
